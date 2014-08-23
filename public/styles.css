@@ -1,0 +1,49 @@
+body {
+  font-family: helvetica;
+  font-size: 1.5em;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+
+.top {
+  background-color: #000;
+  color: #fff;
+}
+
+td {
+  padding: 0.5em;
+}
+
+ul  {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+ul li {
+  padding: 2px 0;
+  line-height: 10%;
+}
+
+a:link {
+    color: #FF6600;
+    text-decoration: none;
+}
+
+a:visited {
+    color: #FF6600;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #FF0000;
+    text-decoration: underline;
+}
+
+a:active {
+    color: #FF0000;
+    text-decoration: underline;
+}
