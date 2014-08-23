@@ -7,56 +7,55 @@ require 'pry'
 # Each team is displayed on this page.
 # For each team, I can see how many wins and losses they have.
 
-TEAM_DATA = 'public/teams.csv'
+TEAM_DATA = 'public/games.csv'
 
 def csv_import(file=TEAM_DATA)
-  @teams = []
+  @games = []
 
   CSV.foreach(file, headers: true, :header_converters => :symbol, :converters => :all) do |team|
-    @teams << team.to_hash
+    @games << team.to_hash
   end
 end
 
 def wins
 
+  @win_hash = []
+  @teams = []
+  @win_calc = []
   @winners = []
   @losers = []
-  @win_hash = []
   @lose_hash = []
 
-  @teams.each do |stats|
+  @games.each do |stats|
+    @teams << stats[:home_team]
+    @teams << stats[:away_team]
+
     if stats[:home_score] > stats[:away_score]
       @winners << stats[:home_team]
       @losers << stats[:away_team]
-      puts "#{stats[:home_team]} win"
     else
       @winners << stats[:away_team]
       @losers << stats[:home_team]
-      puts "#{stats[:away_team]} win"
+
     end
   end
 
-  @winners.each do |winner|
-    @win_hash << {winner => @winners.grep(winner).size}
-  end
+  @teams.uniq!
 
-  @win_hash = @win_hash.uniq #Generates an array with winners and their number of wins
+  @win_calc = @teams + @winners
 
   @losers.each do |loser|
-    @lose_hash << {loser => 0}
+    @lose_hash << {loser => @losers.grep(loser).size}
   end
 
-  @leaderboard = @win_hash + @lose_hash
+  @win_calc.each do |winner|
+    @win_hash << {winner => @win_calc.grep(winner).size - 1}
+  end
 
-  # @win_hash.each do |winner|
-  #   puts "#{winner.keys.join} win #{winner.values.join}"
-  # end
-
-
-
-  # in testing
-  # @test.map {|h| h.values }.uniq
-  # @test.map {|h| h.keys }.uniq
+  @lose_hash.uniq!
+  @win_hash.uniq!
+  @win_presort = @win_hash.reduce({}, :update)
+  @leaderboard = @win_presort.sort_by { |team, wins| wins }.reverse
 
 end
 
@@ -72,16 +71,6 @@ end
 get '/leaderboard' do
   csv_import
   wins
-
   binding.pry
-
   erb :leaderboard
 end
-
-#comapring teams
-
-# if @teams[0][:home_score] > @teams[0][:away_score]
-#    print 'pats win'
-#  else
-#    print 'broncos win'
-#  end
