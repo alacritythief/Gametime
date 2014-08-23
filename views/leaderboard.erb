@@ -1,0 +1,31 @@
+<h1>Top Teams</h1>
+
+<table>
+  <tr class="top">
+      <td>Home Team</td>
+      <td>Away Team</td>
+      <td>Home Score</td>
+      <td>Away Score</td>
+  </tr>
+  <% @teams.each do |team| %>
+    <tr>
+      <td><%= team[:home_team] %></td>
+      <td><%= team[:away_team] %></td>
+      <td><%= team[:home_score] %></td>
+      <td><%= team[:away_score] %></td>
+    </tr>
+  <% end %>
+</table>
+
+<table>
+  <tr class="top">
+      <td>Team</td>
+      <td>Wins</td>
+  </tr>
+  <% @win_hash.each do |winner| %>
+    <tr>
+      <td><%= winner.keys.join %></td>
+      <td><%= winner.values.join %></td>
+    </tr>
+  <% end %>
+</table>
