@@ -4,11 +4,13 @@
   <tr class="top">
       <td>Team</td>
       <td>Wins</td>
+      <td>Losses</td>
   </tr>
   <% @leaderboard.each do |wins| %>
     <tr>
       <td><%= wins[0] %></td>
       <td><%= wins[1] %></td>
+      <td></td>
     </tr>
   <% end %>
 </table>

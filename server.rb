@@ -22,9 +22,11 @@ def wins
   @win_hash = []
   @teams = []
   @win_calc = []
+  @lose_calc = []
   @winners = []
   @losers = []
   @lose_hash = []
+  @winlose_hash = []
 
   @games.each do |stats|
     @teams << stats[:home_team]
@@ -43,9 +45,10 @@ def wins
   @teams.uniq!
 
   @win_calc = @teams + @winners
+  @lose_calc = @teams + @losers
 
-  @losers.each do |loser|
-    @lose_hash << {loser => @losers.grep(loser).size}
+  @lose_calc.each do |loser|
+    @lose_hash << {loser => @lose_calc.grep(loser).size - 1}
   end
 
   @win_calc.each do |winner|
@@ -54,9 +57,12 @@ def wins
 
   @lose_hash.uniq!
   @win_hash.uniq!
+  @lose_presort = @lose_hash.reduce({}, :update)
   @win_presort = @win_hash.reduce({}, :update)
-  @leaderboard = @win_presort.sort_by { |team, wins| wins }.reverse
 
+  @leaderboard = @win_presort.sort_by { |team, wins| wins }.reverse
+  @winlose_hash << @win_presort
+  @winlose_hash << @lose_presort
 end
 
 
