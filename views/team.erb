@@ -1,0 +1,43 @@
+<h1 id="title"><%= params[:team] %></h1><h2 id="sub_title">Team Stats</h2>
+
+<p id="h_title">Wins: <%= @team_wins_loss[0][:wins] %> -- Losses: <%= @team_wins_loss[0][:losses] %></p>
+
+<p id="h_title">Home Games:</p>
+
+<table>
+  <tr class="top">
+      <td>Home Team</td>
+      <td>Away Team</td>
+      <td>Home Score</td>
+      <td>Away Score</td>
+  </tr>
+  <% @h_team_stats.each do |team| %>
+    <tr>
+      <td><a href="/teams/<%= team[:home_team] %>"><%= team[:home_team] %><a></td>
+      <td><a href="/teams/<%= team[:away_team] %>"><%= team[:away_team] %></a></td>
+      <td><%= team[:home_score] %></td>
+      <td><%= team[:away_score] %></td>
+    </tr>
+  <% end %>
+</table>
+
+<p id="h_title">Away Games:</p>
+
+<table>
+  <tr class="top">
+      <td>Home Team</td>
+      <td>Away Team</td>
+      <td>Home Score</td>
+      <td>Away Score</td>
+  </tr>
+  <% @a_team_stats.each do |team| %>
+    <tr>
+      <td><a href="/teams/<%= team[:home_team] %>"><%= team[:home_team] %></a></td>
+      <td><a href="/teams/<%= team[:away_team] %>"><%= team[:away_team] %></a></td>
+      <td><%= team[:home_score] %></td>
+      <td><%= team[:away_score] %></td>
+    </tr>
+  <% end %>
+</table>
+
+<h3 class="nav_link"><a href="/leaderboard">< Back to Leaderboard</a></h3>

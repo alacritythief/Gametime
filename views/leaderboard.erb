@@ -1,4 +1,6 @@
-<h2>Football Gametime Leaderboard</h2>
+<h1 id="title">GAMETIME</h1>
+<h2 id="sub_title">Leaderboard</h2>
+<p id="h_title">NFL PRE-SEASON // <a href="/matches">see all matches</a></p>
 
 <table>
   <tr class="top">
@@ -6,30 +8,11 @@
       <td>Wins</td>
       <td>Losses</td>
   </tr>
-  <% @leaderboard.each do |wins| %>
+  <% @leaderboard.each do |team| %>
     <tr>
-      <td><%= wins[0] %></td>
-      <td><%= wins[1] %></td>
-      <td></td>
-    </tr>
-  <% end %>
-</table>
-
-<h2>Games Thus Far:</h2>
-
-<table>
-  <tr class="top">
-      <td>Home Team</td>
-      <td>Away Team</td>
-      <td>Home Score</td>
-      <td>Away Score</td>
-  </tr>
-  <% @games.each do |team| %>
-    <tr>
-      <td><%= team[:home_team] %></td>
-      <td><%= team[:away_team] %></td>
-      <td><%= team[:home_score] %></td>
-      <td><%= team[:away_score] %></td>
+      <td><a href="/teams/<%= team[:name] %>"><%= team[:name] %></a></td>
+      <td><%= team[:wins] %></td>
+      <td><%= team[:losses] %></td>
     </tr>
   <% end %>
 </table>

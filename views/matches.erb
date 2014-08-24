@@ -1,0 +1,20 @@
+<h1 id="title">GAMETIME</h1>
+<p id="h_title">Matches Thus Far:</p>
+<table>
+  <tr class="top">
+      <td>Home Team</td>
+      <td>Away Team</td>
+      <td>Home Score</td>
+      <td>Away Score</td>
+  </tr>
+  <% @games.each do |team| %>
+    <tr>
+      <td><a href="/teams/<%= team[:home_team] %>"><%= team[:home_team] %></a></td>
+      <td><a href="/teams/<%= team[:away_team] %>"><%= team[:away_team] %></a></td>
+      <td><%= team[:home_score] %></td>
+      <td><%= team[:away_score] %></td>
+    </tr>
+  <% end %>
+</table>
+
+<h3 class="nav_link"><a href="/leaderboard">< Back to Leaderboard</a></h3>

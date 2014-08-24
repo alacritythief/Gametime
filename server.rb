@@ -1,11 +1,5 @@
 require 'sinatra'
-require 'sinatra/reloader'
 require 'csv'
-require 'pry'
-
-# I can navigate to a page /leaderboard to view the summary of the league.
-# Each team is displayed on this page.
-# For each team, I can see how many wins and losses they have.
 
 TEAM_DATA = 'public/games.csv'
 
@@ -17,20 +11,34 @@ def csv_import(file=TEAM_DATA)
   end
 end
 
-def wins
+def calc_stats
 
-  @win_hash = []
+  team_choice = params[:team]
+
   @teams = []
-  @win_calc = []
-  @lose_calc = []
+  @h_team_stats = []
+  @a_team_stats = []
+  @team_wins_loss = []
+
   @winners = []
   @losers = []
+
   @lose_hash = []
-  @winlose_hash = []
+  @win_hash = []
+
+  @win_calc = []
+  @lose_calc = []
+  @win_lose_calc = []
+
+  @scoreboard = []
+  @leaderboard = []
 
   @games.each do |stats|
     @teams << stats[:home_team]
     @teams << stats[:away_team]
+
+    @h_team_stats << stats if stats[:home_team] == team_choice
+    @a_team_stats << stats if stats[:away_team] == team_choice
 
     if stats[:home_score] > stats[:away_score]
       @winners << stats[:home_team]
@@ -57,16 +65,24 @@ def wins
 
   @lose_hash.uniq!
   @win_hash.uniq!
-  @lose_presort = @lose_hash.reduce({}, :update)
-  @win_presort = @win_hash.reduce({}, :update)
 
-  @leaderboard = @win_presort.sort_by { |team, wins| wins }.reverse
-  @winlose_hash << @win_presort
-  @winlose_hash << @lose_presort
+  @win_lose_calc = @win_hash.zip(@lose_hash)
+
+  @win_lose_calc.each do |wins,loss|
+    wins.each do |wteam,wscore|
+      loss.each do |lteam,lscore|
+        @scoreboard << {:name => wteam, :wins => wscore, :losses => lscore}
+      end
+    end
+  end
+
+  @scoreboard.each do |team|
+    @team_wins_loss << team if team[:name] == team_choice
+  end
+
+  @leaderboard = @scoreboard.sort_by { |team| [-team[:wins], team[:losses]] }
+
 end
-
-
-
 
 # ROUTES
 
@@ -76,7 +92,18 @@ end
 
 get '/leaderboard' do
   csv_import
-  wins
-  binding.pry
+  calc_stats
   erb :leaderboard
+end
+
+get '/teams/:team' do
+  csv_import
+  calc_stats
+  erb :team
+end
+
+get '/matches' do
+  csv_import
+  calc_stats
+  erb :matches
 end
