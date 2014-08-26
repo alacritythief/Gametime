@@ -47,7 +47,6 @@ def calc_winners_losers
     else
       @winners << stats[:away_team]
       @losers << stats[:home_team]
-
     end
   end
 end
@@ -71,7 +70,6 @@ end
 
 def calc_leaderboard
   @win_lose_calc = @win_hash.zip(@lose_hash)
-
   @win_lose_calc.each do |wins,loss|
     wins.each do |wteam,wscore|
       loss.each do |lteam,lscore|
