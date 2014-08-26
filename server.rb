@@ -1,6 +1,5 @@
 require 'sinatra'
 require 'csv'
-require 'sinatra/reloader'
 
 TEAM_DATA = 'public/games.csv'
 
