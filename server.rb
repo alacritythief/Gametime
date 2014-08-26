@@ -1,5 +1,6 @@
 require 'sinatra'
 require 'csv'
+require 'sinatra/reloader'
 
 TEAM_DATA = 'public/games.csv'
 
@@ -11,9 +12,8 @@ def csv_import(file=TEAM_DATA)
   end
 end
 
-def calc_stats
-
-  team_choice = params[:team]
+def declare_variables
+  @team_choice = params[:team]
 
   @teams = []
   @h_team_stats = []
@@ -32,13 +32,15 @@ def calc_stats
 
   @scoreboard = []
   @leaderboard = []
+end
 
+def calc_winners_losers
   @games.each do |stats|
     @teams << stats[:home_team]
     @teams << stats[:away_team]
 
-    @h_team_stats << stats if stats[:home_team] == team_choice
-    @a_team_stats << stats if stats[:away_team] == team_choice
+    @h_team_stats << stats if stats[:home_team] == @team_choice
+    @a_team_stats << stats if stats[:away_team] == @team_choice
 
     if stats[:home_score] > stats[:away_score]
       @winners << stats[:home_team]
@@ -49,9 +51,13 @@ def calc_stats
 
     end
   end
+end
 
-  @teams.uniq!
+def uniq(array)
+  array.uniq!
+end
 
+def num_win_loss
   @win_calc = @teams + @winners
   @lose_calc = @teams + @losers
 
@@ -62,10 +68,9 @@ def calc_stats
   @win_calc.each do |winner|
     @win_hash << {winner => @win_calc.grep(winner).size - 1}
   end
+end
 
-  @lose_hash.uniq!
-  @win_hash.uniq!
-
+def calc_leaderboard
   @win_lose_calc = @win_hash.zip(@lose_hash)
 
   @win_lose_calc.each do |wins,loss|
@@ -77,11 +82,20 @@ def calc_stats
   end
 
   @scoreboard.each do |team|
-    @team_wins_loss << team if team[:name] == team_choice
+    @team_wins_loss << team if team[:name] == @team_choice
   end
 
   @leaderboard = @scoreboard.sort_by { |team| [-team[:wins], team[:losses]] }
+end
 
+def calc_stats
+  declare_variables
+  calc_winners_losers
+  uniq(@teams)
+  num_win_loss
+  uniq(@lose_hash)
+  uniq(@win_hash)
+  calc_leaderboard
 end
 
 # ROUTES
